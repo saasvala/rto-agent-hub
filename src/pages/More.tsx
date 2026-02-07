@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/context/AppContext';
 import BottomNav from '@/components/BottomNav';
+import BackupRestore from '@/components/BackupRestore';
 import { 
   ArrowLeft, 
   Settings, 
@@ -113,6 +114,14 @@ export default function More() {
               </button>
             ))}
           </div>
+        </section>
+
+        {/* Backup & Restore */}
+        <section>
+          <h3 className="text-sm font-semibold text-muted-foreground mb-3 uppercase tracking-wide">
+            Data Management
+          </h3>
+          <BackupRestore />
         </section>
 
         {/* Logout */}

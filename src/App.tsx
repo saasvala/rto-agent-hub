@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AppProvider, useApp } from "@/context/AppContext";
 import PinLogin from "@/components/PinLogin";
+import OfflineIndicator from "@/components/OfflineIndicator";
 import Dashboard from "@/pages/Dashboard";
 import Services from "@/pages/Services";
 import Customers from "@/pages/Customers";
@@ -48,6 +49,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <AppProvider>
+        <OfflineIndicator />
         <Toaster />
         <Sonner />
         <BrowserRouter>
