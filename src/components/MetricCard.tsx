@@ -10,6 +10,7 @@ interface MetricCardProps {
   subtitle?: string;
   onClick?: () => void;
   pulse?: boolean;
+  delay?: number;
 }
 
 export default function MetricCard({
@@ -20,6 +21,7 @@ export default function MetricCard({
   subtitle,
   onClick,
   pulse,
+  delay = 0,
 }: MetricCardProps) {
   const variantClasses = {
     default: 'bg-card text-foreground',
@@ -41,10 +43,11 @@ export default function MetricCard({
     <div
       onClick={onClick}
       className={cn(
-        'metric-card cursor-pointer',
+        'metric-card cursor-pointer animate-scale-in',
         variantClasses[variant],
         pulse && 'pulse-pending'
       )}
+      style={{ animationDelay: `${delay}ms`, animationFillMode: 'both' }}
     >
       <div className="flex items-start justify-between">
         <div className="flex-1">
