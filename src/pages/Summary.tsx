@@ -81,6 +81,14 @@ export default function Summary() {
       </header>
 
       <main className="px-4 py-4 space-y-6">
+        {isAssistant && (
+          <div className="bg-warning/10 border border-warning/30 rounded-xl p-4 text-center text-warning text-sm font-medium">
+            Summary is restricted to Owner access only
+          </div>
+        )}
+
+        {!isAssistant && (
+          <>
         {/* Smart Alerts */}
         <SmartAlerts />
 
