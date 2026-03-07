@@ -76,16 +76,27 @@ interface AppContextType extends AppState {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-// Demo user for development
-const demoUser: User = {
-  id: 'demo-user',
-  pin: '1234',
-  role: 'owner',
-  name: 'RTO Agent Demo',
-  deviceId: 'demo-device',
-  licenseExpiry: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
-  status: 'active',
-};
+// Demo users for development
+const demoUsers: User[] = [
+  {
+    id: 'demo-owner',
+    pin: '1234',
+    role: 'owner',
+    name: 'RTO Agent (Owner)',
+    deviceId: 'demo-device',
+    licenseExpiry: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+    status: 'active',
+  },
+  {
+    id: 'demo-assistant',
+    pin: '5678',
+    role: 'assistant',
+    name: 'Counter Assistant',
+    deviceId: 'demo-device',
+    licenseExpiry: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+    status: 'active',
+  },
+];
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AppState>(() => ({
