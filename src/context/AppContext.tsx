@@ -136,8 +136,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [state.expenses]);
 
   const login = (pin: string): boolean => {
-    if (pin === demoUser.pin) {
-      setState(prev => ({ ...prev, isAuthenticated: true, user: demoUser }));
+    const matchedUser = demoUsers.find(u => u.pin === pin);
+    if (matchedUser) {
+      setState(prev => ({ ...prev, isAuthenticated: true, user: matchedUser }));
       return true;
     }
     return false;

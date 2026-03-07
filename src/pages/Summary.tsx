@@ -9,12 +9,6 @@ export default function Summary() {
   const navigate = useNavigate();
   const { files, payments, expenses, services, user } = useApp();
 
-  // Redirect assistant away from summary
-  if (user?.role === 'assistant') {
-    navigate('/dashboard');
-    return null;
-  }
-
   const dailySummary = useMemo(() => {
     const todayFiles = files.filter(f => isToday(f.createdAt));
     const todayPayments = payments.filter(p => isToday(p.date));
