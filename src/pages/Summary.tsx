@@ -198,6 +198,8 @@ export default function Summary() {
             </div>
           </section>
         )}
+          </>
+        )}
       </main>
     </div>
   );
