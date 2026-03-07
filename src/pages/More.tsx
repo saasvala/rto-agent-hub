@@ -22,12 +22,14 @@ export default function More() {
   const navigate = useNavigate();
   const { logout, user } = useApp();
 
+  const isAssistant = user?.role === 'assistant';
+
   const menuItems = [
-    { icon: Settings, label: 'Services & Pricing', path: '/services' },
+    ...(isAssistant ? [] : [{ icon: Settings, label: 'Services & Pricing', path: '/services' }]),
     { icon: FileText, label: 'All Files', path: '/files' },
     { icon: CreditCard, label: 'Payment History', path: '/payments' },
-    { icon: Receipt, label: 'Expenses', path: '/expenses' },
-    { icon: BarChart2, label: 'Daily Summary', path: '/summary' },
+    ...(isAssistant ? [] : [{ icon: Receipt, label: 'Expenses', path: '/expenses' }]),
+    ...(isAssistant ? [] : [{ icon: BarChart2, label: 'Daily Summary', path: '/summary' }]),
   ];
 
   const settingsItems = [

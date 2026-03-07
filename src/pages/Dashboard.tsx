@@ -6,6 +6,8 @@ import BottomNav from '@/components/BottomNav';
 import MetricCard from '@/components/MetricCard';
 import QuickAction from '@/components/QuickAction';
 import FileCard from '@/components/FileCard';
+import SmartAlerts from '@/components/SmartAlerts';
+import AnimatedValue from '@/components/AnimatedValue';
 import { formatCurrency, isToday } from '@/lib/helpers';
 import { 
   FileText, 
@@ -23,7 +25,8 @@ import {
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { files, payments, expenses, documents } = useApp();
+  const { files, payments, expenses, documents, user } = useApp();
+  const isAssistant = user?.role === 'assistant';
 
   const metrics = useMemo(() => {
     const todayFiles = files.filter(f => isToday(f.createdAt));
@@ -74,6 +77,7 @@ export default function Dashboard() {
               value={metrics.filesToday}
               icon={FileText}
               variant="primary"
+              delay={0}
               onClick={() => navigate('/files')}
             />
             <MetricCard
@@ -81,6 +85,7 @@ export default function Dashboard() {
               value={metrics.pendingFiles}
               icon={Clock}
               variant="warning"
+              delay={80}
               pulse={metrics.pendingFiles > 10}
               onClick={() => navigate('/files?status=pending')}
             />
@@ -89,6 +94,7 @@ export default function Dashboard() {
               value={formatCurrency(metrics.todayCollection)}
               icon={IndianRupee}
               variant="success"
+              delay={160}
               onClick={() => navigate('/payments')}
             />
             <MetricCard
@@ -96,6 +102,7 @@ export default function Dashboard() {
               value={formatCurrency(metrics.paymentPending)}
               icon={AlertCircle}
               variant="accent"
+              delay={240}
               pulse={metrics.paymentPending > 10000}
               onClick={() => navigate('/payments?filter=pending')}
             />
@@ -109,32 +116,43 @@ export default function Dashboard() {
               title="Ready for Delivery"
               value={metrics.readyForDelivery}
               icon={CheckCircle}
+              delay={320}
               onClick={() => navigate('/files?status=ready')}
             />
             <MetricCard
               title="Documents Missing"
               value={metrics.documentMissing}
               icon={FileWarning}
+              delay={400}
               onClick={() => navigate('/documents')}
             />
-            <MetricCard
-              title="Agent Income"
-              value={formatCurrency(metrics.agentIncome)}
-              icon={TrendingUp}
-              subtitle="This month"
-              onClick={() => navigate('/summary')}
-            />
-            <MetricCard
-              title="Today Expenses"
-              value={formatCurrency(metrics.todayExpenses)}
-              icon={IndianRupee}
-              onClick={() => navigate('/expenses')}
-            />
+            {!isAssistant && (
+              <>
+                <MetricCard
+                  title="Agent Income"
+                  value={formatCurrency(metrics.agentIncome)}
+                  icon={TrendingUp}
+                  subtitle="This month"
+                  delay={480}
+                  onClick={() => navigate('/summary')}
+                />
+                <MetricCard
+                  title="Today Expenses"
+                  value={formatCurrency(metrics.todayExpenses)}
+                  icon={IndianRupee}
+                  delay={560}
+                  onClick={() => navigate('/expenses')}
+                />
+              </>
+            )}
           </div>
         </section>
 
+        {/* Smart Alerts (owner only) */}
+        {!isAssistant && <SmartAlerts />}
+
         {/* Quick Actions */}
-        <section>
+        <section className="animate-fade-in" style={{ animationDelay: '400ms', animationFillMode: 'both' }}>
           <h2 className="text-sm font-semibold text-muted-foreground mb-3 uppercase tracking-wide">
             Quick Actions
           </h2>
@@ -145,26 +163,30 @@ export default function Dashboard() {
               onClick={() => navigate('/new-file')}
               variant="primary"
             />
-            <QuickAction
-              icon={Settings}
-              label="Services"
-              onClick={() => navigate('/services')}
-            />
+            {!isAssistant && (
+              <QuickAction
+                icon={Settings}
+                label="Services"
+                onClick={() => navigate('/services')}
+              />
+            )}
             <QuickAction
               icon={CreditCard}
               label="Payments"
               onClick={() => navigate('/payments')}
             />
-            <QuickAction
-              icon={BarChart2}
-              label="Summary"
-              onClick={() => navigate('/summary')}
-            />
+            {!isAssistant && (
+              <QuickAction
+                icon={BarChart2}
+                label="Summary"
+                onClick={() => navigate('/summary')}
+              />
+            )}
           </div>
         </section>
 
         {/* Recent Files */}
-        <section>
+        <section className="animate-fade-in" style={{ animationDelay: '500ms', animationFillMode: 'both' }}>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
               Recent Files
@@ -179,12 +201,13 @@ export default function Dashboard() {
           
           {recentFiles.length > 0 ? (
             <div className="space-y-3">
-              {recentFiles.map(file => (
-                <FileCard
-                  key={file.id}
-                  file={file}
-                  onClick={() => navigate(`/file/${file.id}`)}
-                />
+              {recentFiles.map((file, i) => (
+                <div key={file.id} className="animate-slide-up" style={{ animationDelay: `${600 + i * 80}ms`, animationFillMode: 'both' }}>
+                  <FileCard
+                    file={file}
+                    onClick={() => navigate(`/file/${file.id}`)}
+                  />
+                </div>
               ))}
             </div>
           ) : (

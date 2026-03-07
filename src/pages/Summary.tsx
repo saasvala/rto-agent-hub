@@ -2,11 +2,14 @@ import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/context/AppContext';
 import { formatCurrency, isToday } from '@/lib/helpers';
-import { ArrowLeft, FileText, IndianRupee, TrendingUp, Receipt, Calendar } from 'lucide-react';
+import SmartAlerts from '@/components/SmartAlerts';
+import { ArrowLeft, FileText, IndianRupee, TrendingUp, Receipt, Calendar, BarChart2 } from 'lucide-react';
 
 export default function Summary() {
   const navigate = useNavigate();
-  const { files, payments, expenses, services } = useApp();
+  const { files, payments, expenses, services, user } = useApp();
+
+  const isAssistant = user?.role === 'assistant';
 
   const dailySummary = useMemo(() => {
     const todayFiles = files.filter(f => isToday(f.createdAt));
@@ -15,13 +18,12 @@ export default function Summary() {
     
     const collection = todayPayments.reduce((sum, p) => sum + p.amount, 0);
     const expenseTotal = todayExpenses.reduce((sum, e) => sum + e.amount, 0);
-    const netEarning = collection - expenseTotal;
     
     return {
       filesHandled: todayFiles.length,
       collection,
       expenses: expenseTotal,
-      netEarning,
+      netEarning: collection - expenseTotal,
     };
   }, [files, payments, expenses]);
 
@@ -79,8 +81,19 @@ export default function Summary() {
       </header>
 
       <main className="px-4 py-4 space-y-6">
+        {isAssistant && (
+          <div className="bg-warning/10 border border-warning/30 rounded-xl p-4 text-center text-warning text-sm font-medium">
+            Summary is restricted to Owner access only
+          </div>
+        )}
+
+        {!isAssistant && (
+          <>
+        {/* Smart Alerts */}
+        <SmartAlerts />
+
         {/* Today's Summary */}
-        <section>
+        <section className="animate-fade-in">
           <div className="flex items-center gap-2 mb-3">
             <Calendar className="w-5 h-5 text-primary" />
             <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
@@ -115,10 +128,13 @@ export default function Summary() {
         </section>
 
         {/* Monthly Summary */}
-        <section>
-          <h2 className="text-sm font-semibold text-muted-foreground mb-3 uppercase tracking-wide">
-            This Month
-          </h2>
+        <section className="animate-fade-in" style={{ animationDelay: '150ms', animationFillMode: 'both' }}>
+          <div className="flex items-center gap-2 mb-3">
+            <BarChart2 className="w-5 h-5 text-primary" />
+            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+              This Month
+            </h2>
+          </div>
           
           <div className="bg-card rounded-xl border border-border p-4 space-y-4">
             <div className="grid grid-cols-2 gap-3">
@@ -159,7 +175,7 @@ export default function Summary() {
 
         {/* Top Services */}
         {topServices.length > 0 && (
-          <section>
+          <section className="animate-fade-in" style={{ animationDelay: '300ms', animationFillMode: 'both' }}>
             <h2 className="text-sm font-semibold text-muted-foreground mb-3 uppercase tracking-wide">
               Top Services
             </h2>
@@ -181,6 +197,8 @@ export default function Summary() {
               ))}
             </div>
           </section>
+        )}
+          </>
         )}
       </main>
     </div>
