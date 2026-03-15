@@ -84,6 +84,10 @@ export interface ApplicationFile {
   createdAt: Date;
   updatedAt: Date;
   notes?: string;
+  deliveredAt?: Date;
+  deliveryNote?: string;
+  followUpDate?: Date;
+  followUpNote?: string;
 }
 
 export interface Document {

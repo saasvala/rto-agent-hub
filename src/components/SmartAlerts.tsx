@@ -77,6 +77,34 @@ export default function SmartAlerts() {
       }
     }
 
+    // Low pricing warning: services with agent charge below ₹300
+    const lowPricedServices = services.filter(s => s.isActive && s.agentCharge < 300 && s.agentCharge > 0);
+    if (lowPricedServices.length > 0) {
+      result.push({
+        id: 'low-pricing',
+        icon: AlertTriangle,
+        title: 'Low Pricing Warning',
+        message: `${lowPricedServices.length} service${lowPricedServices.length > 1 ? 's' : ''} with agent charge below ₹300 — ${lowPricedServices.map(s => s.name).slice(0, 2).join(', ')}`,
+        severity: 'warning',
+      });
+    }
+
+    // Follow-up reminders
+    const followUps = files.filter(f => {
+      if (['DELIVERED', 'REJECTED'].includes(f.status)) return false;
+      if (!f.followUpDate) return false;
+      return new Date(f.followUpDate) <= now;
+    });
+    if (followUps.length > 0) {
+      result.push({
+        id: 'followup',
+        icon: Clock,
+        title: 'Follow-up Due',
+        message: `${followUps.length} file${followUps.length > 1 ? 's' : ''} need follow-up today`,
+        severity: 'warning',
+      });
+    }
+
     return result;
   }, [files, payments, services]);
 
