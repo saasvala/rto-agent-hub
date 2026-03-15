@@ -9,6 +9,8 @@ import OfflineIndicator from "@/components/OfflineIndicator";
 import Dashboard from "@/pages/Dashboard";
 import Services from "@/pages/Services";
 import Customers from "@/pages/Customers";
+import CustomerDetail from "@/pages/CustomerDetail";
+import AddCustomer from "@/pages/AddCustomer";
 import Files from "@/pages/Files";
 import NewFile from "@/pages/NewFile";
 import FileDetail from "@/pages/FileDetail";
@@ -33,6 +35,8 @@ function AppRoutes() {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/services" element={<Services />} />
       <Route path="/customers" element={<Customers />} />
+      <Route path="/customer/:id" element={<CustomerDetail />} />
+      <Route path="/add-customer" element={<AddCustomer />} />
       <Route path="/files" element={<Files />} />
       <Route path="/new-file" element={<NewFile />} />
       <Route path="/file/:id" element={<FileDetail />} />
