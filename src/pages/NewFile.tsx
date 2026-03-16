@@ -258,6 +258,70 @@ export default function NewFile() {
                   <span className="font-medium text-primary">+ Add New Customer</span>
                 </button>
 
+                {/* Frequent Customers */}
+                {!searchQuery && frequentCustomers.length > 0 && (
+                  <div className="mb-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Star className="w-4 h-4 text-accent" />
+                      <h3 className="text-sm font-semibold text-foreground">Frequent Customers</h3>
+                    </div>
+                    <div className="flex gap-2 overflow-x-auto pb-2">
+                      {frequentCustomers.map(customer => (
+                        <button
+                          key={customer.id}
+                          onClick={() => handleSelectCustomer(customer)}
+                          className="flex-shrink-0 bg-accent/10 rounded-xl px-4 py-3 border border-accent/30 text-left hover:border-accent transition-colors min-w-[140px]"
+                        >
+                          <p className="font-medium text-foreground text-sm truncate">{customer.name}</p>
+                          <p className="text-xs text-muted-foreground">{customer.mobile}</p>
+                          <div className="flex items-center gap-1 mt-1">
+                            <FileText className="w-3 h-3 text-accent" />
+                            <span className="text-xs font-medium text-accent">{customerFileCounts[customer.id]} files</span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Recent Customers */}
+                {!searchQuery && recentCustomers.length > 0 && (
+                  <div className="mb-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Clock className="w-4 h-4 text-primary" />
+                      <h3 className="text-sm font-semibold text-foreground">Recent Customers</h3>
+                    </div>
+                    <div className="space-y-2">
+                      {recentCustomers.map(customer => (
+                        <button
+                          key={customer.id}
+                          onClick={() => handleSelectCustomer(customer)}
+                          className="w-full bg-card rounded-xl p-3 border border-border text-left hover:border-primary transition-colors"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
+                              <Clock className="w-4 h-4 text-primary" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-medium text-foreground text-sm truncate">{customer.name}</h3>
+                              <p className="text-xs text-muted-foreground">{customer.mobile}</p>
+                            </div>
+                            <span className="text-xs text-muted-foreground">{customerFileCounts[customer.id] || 1} file{(customerFileCounts[customer.id] || 1) > 1 ? 's' : ''}</span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* All Customers heading */}
+                {!searchQuery && (frequentCustomers.length > 0 || recentCustomers.length > 0) && (
+                  <div className="flex items-center gap-2 mb-2">
+                    <User className="w-4 h-4 text-muted-foreground" />
+                    <h3 className="text-sm font-semibold text-foreground">All Customers</h3>
+                  </div>
+                )}
+
                 <div className="space-y-2">
                   {filteredCustomers.map(customer => (
                     <button
