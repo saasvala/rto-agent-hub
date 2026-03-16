@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { User, Service, Customer, ApplicationFile, Document, Payment, Expense, UserRole } from '@/types';
 import { loadFromStorage, saveToStorage, STORAGE_KEYS } from '@/lib/storage';
 import { generateId } from '@/lib/helpers';
+import { seedCustomers, generateSeedFiles, generateSeedDocuments, generateSeedPayments, seedExpenses } from '@/lib/seedData';
 
 // Default services
 const defaultServices: Service[] = [
