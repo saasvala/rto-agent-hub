@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/context/AppContext';
-import { ArrowLeft, Check, ChevronRight, User, FileText, CreditCard, Zap } from 'lucide-react';
+import { ArrowLeft, Check, ChevronRight, User, FileText, CreditCard, Zap, Star, Clock } from 'lucide-react';
 import { formatCurrency, getCategoryLabel } from '@/lib/helpers';
 import { cn } from '@/lib/utils';
 import { Service, Customer } from '@/types';
@@ -10,7 +10,7 @@ type Step = 'service' | 'customer' | 'documents' | 'payment';
 
 export default function NewFile() {
   const navigate = useNavigate();
-  const { services, customers, addCustomer, addFile, addDocument } = useApp();
+  const { services, customers, files, addCustomer, addFile, addDocument } = useApp();
   const [currentStep, setCurrentStep] = useState<Step>('service');
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
@@ -43,6 +43,44 @@ export default function NewFile() {
     c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     c.mobile.includes(searchQuery)
   );
+
+  // Calculate file counts per customer for frequency ranking
+  const customerFileCounts = React.useMemo(() => {
+    const counts: Record<string, number> = {};
+    files.forEach(f => {
+      counts[f.customerId] = (counts[f.customerId] || 0) + 1;
+    });
+    return counts;
+  }, [files]);
+
+  // Most frequent customers (2+ files, top 5)
+  const frequentCustomers = React.useMemo(() => {
+    return customers
+      .filter(c => (customerFileCounts[c.id] || 0) >= 2)
+      .sort((a, b) => (customerFileCounts[b.id] || 0) - (customerFileCounts[a.id] || 0))
+      .slice(0, 5);
+  }, [customers, customerFileCounts]);
+
+  // Recent customers (last 5 unique from files, excluding frequent)
+  const recentCustomers = React.useMemo(() => {
+    const frequentIds = new Set(frequentCustomers.map(c => c.id));
+    const seen = new Set<string>();
+    const recent: Customer[] = [];
+    const sortedFiles = [...files].sort((a, b) => 
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+    for (const f of sortedFiles) {
+      if (!seen.has(f.customerId) && !frequentIds.has(f.customerId)) {
+        const cust = customers.find(c => c.id === f.customerId);
+        if (cust) {
+          recent.push(cust);
+          seen.add(f.customerId);
+        }
+      }
+      if (recent.length >= 5) break;
+    }
+    return recent;
+  }, [files, customers, frequentCustomers]);
 
   const totalAmount = selectedService 
     ? selectedService.govtFee + selectedService.agentCharge + (isUrgent && selectedService.urgentCharge ? selectedService.urgentCharge : 0)
@@ -219,6 +257,70 @@ export default function NewFile() {
                   </div>
                   <span className="font-medium text-primary">+ Add New Customer</span>
                 </button>
+
+                {/* Frequent Customers */}
+                {!searchQuery && frequentCustomers.length > 0 && (
+                  <div className="mb-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Star className="w-4 h-4 text-accent" />
+                      <h3 className="text-sm font-semibold text-foreground">Frequent Customers</h3>
+                    </div>
+                    <div className="flex gap-2 overflow-x-auto pb-2">
+                      {frequentCustomers.map(customer => (
+                        <button
+                          key={customer.id}
+                          onClick={() => handleSelectCustomer(customer)}
+                          className="flex-shrink-0 bg-accent/10 rounded-xl px-4 py-3 border border-accent/30 text-left hover:border-accent transition-colors min-w-[140px]"
+                        >
+                          <p className="font-medium text-foreground text-sm truncate">{customer.name}</p>
+                          <p className="text-xs text-muted-foreground">{customer.mobile}</p>
+                          <div className="flex items-center gap-1 mt-1">
+                            <FileText className="w-3 h-3 text-accent" />
+                            <span className="text-xs font-medium text-accent">{customerFileCounts[customer.id]} files</span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Recent Customers */}
+                {!searchQuery && recentCustomers.length > 0 && (
+                  <div className="mb-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Clock className="w-4 h-4 text-primary" />
+                      <h3 className="text-sm font-semibold text-foreground">Recent Customers</h3>
+                    </div>
+                    <div className="space-y-2">
+                      {recentCustomers.map(customer => (
+                        <button
+                          key={customer.id}
+                          onClick={() => handleSelectCustomer(customer)}
+                          className="w-full bg-card rounded-xl p-3 border border-border text-left hover:border-primary transition-colors"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
+                              <Clock className="w-4 h-4 text-primary" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-medium text-foreground text-sm truncate">{customer.name}</h3>
+                              <p className="text-xs text-muted-foreground">{customer.mobile}</p>
+                            </div>
+                            <span className="text-xs text-muted-foreground">{customerFileCounts[customer.id] || 1} file{(customerFileCounts[customer.id] || 1) > 1 ? 's' : ''}</span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* All Customers heading */}
+                {!searchQuery && (frequentCustomers.length > 0 || recentCustomers.length > 0) && (
+                  <div className="flex items-center gap-2 mb-2">
+                    <User className="w-4 h-4 text-muted-foreground" />
+                    <h3 className="text-sm font-semibold text-foreground">All Customers</h3>
+                  </div>
+                )}
 
                 <div className="space-y-2">
                   {filteredCustomers.map(customer => (
