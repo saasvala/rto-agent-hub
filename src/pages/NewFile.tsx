@@ -10,7 +10,7 @@ type Step = 'service' | 'customer' | 'documents' | 'payment';
 
 export default function NewFile() {
   const navigate = useNavigate();
-  const { services, customers, addCustomer, addFile, addDocument } = useApp();
+  const { services, customers, files, addCustomer, addFile, addDocument } = useApp();
   const [currentStep, setCurrentStep] = useState<Step>('service');
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
