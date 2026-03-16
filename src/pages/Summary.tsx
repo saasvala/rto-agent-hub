@@ -211,8 +211,8 @@ export default function Summary() {
               </div>
               <div className="bg-card rounded-xl border border-border divide-y divide-border">
                 <div className="flex items-center gap-3 p-4">
-                  <div className="w-9 h-9 rounded-full bg-blue-500/10 flex items-center justify-center">
-                    <FileText className="w-4 h-4 text-blue-500" />
+                  <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
+                    <FileText className="w-4 h-4 text-primary" />
                   </div>
                   <div className="flex-1">
                     <p className="font-medium text-foreground">Submitted</p>
