@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/context/AppContext';
-import { ArrowLeft, Check, ChevronRight, User, FileText, CreditCard, Zap } from 'lucide-react';
+import { ArrowLeft, Check, ChevronRight, User, FileText, CreditCard, Zap, Star, Clock } from 'lucide-react';
 import { formatCurrency, getCategoryLabel } from '@/lib/helpers';
 import { cn } from '@/lib/utils';
 import { Service, Customer } from '@/types';
