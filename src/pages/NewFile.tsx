@@ -44,6 +44,44 @@ export default function NewFile() {
     c.mobile.includes(searchQuery)
   );
 
+  // Calculate file counts per customer for frequency ranking
+  const customerFileCounts = React.useMemo(() => {
+    const counts: Record<string, number> = {};
+    files.forEach(f => {
+      counts[f.customerId] = (counts[f.customerId] || 0) + 1;
+    });
+    return counts;
+  }, [files]);
+
+  // Most frequent customers (2+ files, top 5)
+  const frequentCustomers = React.useMemo(() => {
+    return customers
+      .filter(c => (customerFileCounts[c.id] || 0) >= 2)
+      .sort((a, b) => (customerFileCounts[b.id] || 0) - (customerFileCounts[a.id] || 0))
+      .slice(0, 5);
+  }, [customers, customerFileCounts]);
+
+  // Recent customers (last 5 unique from files, excluding frequent)
+  const recentCustomers = React.useMemo(() => {
+    const frequentIds = new Set(frequentCustomers.map(c => c.id));
+    const seen = new Set<string>();
+    const recent: Customer[] = [];
+    const sortedFiles = [...files].sort((a, b) => 
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+    for (const f of sortedFiles) {
+      if (!seen.has(f.customerId) && !frequentIds.has(f.customerId)) {
+        const cust = customers.find(c => c.id === f.customerId);
+        if (cust) {
+          recent.push(cust);
+          seen.add(f.customerId);
+        }
+      }
+      if (recent.length >= 5) break;
+    }
+    return recent;
+  }, [files, customers, frequentCustomers]);
+
   const totalAmount = selectedService 
     ? selectedService.govtFee + selectedService.agentCharge + (isUrgent && selectedService.urgentCharge ? selectedService.urgentCharge : 0)
     : 0;
