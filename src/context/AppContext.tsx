@@ -100,16 +100,21 @@ const demoUsers: User[] = [
 ];
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<AppState>(() => ({
-    isAuthenticated: false,
-    user: null,
-    services: loadFromStorage(STORAGE_KEYS.SERVICES, defaultServices),
-    customers: loadFromStorage(STORAGE_KEYS.CUSTOMERS, []),
-    files: loadFromStorage(STORAGE_KEYS.FILES, []),
-    documents: loadFromStorage(STORAGE_KEYS.DOCUMENTS, []),
-    payments: loadFromStorage(STORAGE_KEYS.PAYMENTS, []),
-    expenses: loadFromStorage(STORAGE_KEYS.EXPENSES, []),
-  }));
+  const [state, setState] = useState<AppState>(() => {
+    const services = loadFromStorage(STORAGE_KEYS.SERVICES, defaultServices);
+    const serviceIds = services.map(s => s.id);
+    
+    return {
+      isAuthenticated: false,
+      user: null,
+      services,
+      customers: loadFromStorage(STORAGE_KEYS.CUSTOMERS, seedCustomers),
+      files: loadFromStorage(STORAGE_KEYS.FILES, generateSeedFiles(serviceIds)),
+      documents: loadFromStorage(STORAGE_KEYS.DOCUMENTS, generateSeedDocuments()),
+      payments: loadFromStorage(STORAGE_KEYS.PAYMENTS, generateSeedPayments()),
+      expenses: loadFromStorage(STORAGE_KEYS.EXPENSES, seedExpenses),
+    };
+  });
 
   // Save to storage when data changes
   useEffect(() => {
