@@ -104,15 +104,15 @@ export default function More() {
           <div className="bg-card rounded-xl border border-border overflow-hidden divide-y divide-border">
             {settingsItems.map(item => (
               <button
-                key={item.path}
-                onClick={() => navigate(item.path)}
+                key={item.label}
+                onClick={item.action}
                 className="w-full flex items-center gap-4 px-4 py-4 hover:bg-muted/50 transition-colors"
               >
                 <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
                   <item.icon className="w-5 h-5 text-muted-foreground" />
                 </div>
                 <span className="flex-1 text-left font-medium text-foreground">{item.label}</span>
-                <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                <span className="text-xs text-muted-foreground">Coming Soon</span>
               </button>
             ))}
           </div>
