@@ -33,10 +33,10 @@ export default function More() {
   ];
 
   const settingsItems = [
-    { icon: User, label: 'Profile Settings', path: '/profile' },
-    { icon: Bell, label: 'Notifications', path: '/notifications' },
-    { icon: Shield, label: 'License & Device', path: '/license' },
-    { icon: HelpCircle, label: 'Help & Support', path: '/help' },
+    { icon: User, label: 'Profile Settings', action: () => {} },
+    { icon: Bell, label: 'Notifications', action: () => {} },
+    { icon: Shield, label: 'License & Device', action: () => {} },
+    { icon: HelpCircle, label: 'Help & Support', action: () => {} },
   ];
 
   const handleLogout = () => {
