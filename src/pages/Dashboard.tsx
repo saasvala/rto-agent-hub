@@ -124,7 +124,7 @@ export default function Dashboard() {
               value={metrics.documentMissing}
               icon={FileWarning}
               delay={400}
-              onClick={() => navigate('/files?status=pending')}
+              onClick={() => navigate('/documents')}
             />
             {!isAssistant && (
               <>

@@ -7,6 +7,7 @@ import { AppProvider, useApp } from "@/context/AppContext";
 import PinLogin from "@/components/PinLogin";
 import OfflineIndicator from "@/components/OfflineIndicator";
 import Dashboard from "@/pages/Dashboard";
+import Documents from "@/pages/Documents";
 import Services from "@/pages/Services";
 import Customers from "@/pages/Customers";
 import CustomerDetail from "@/pages/CustomerDetail";
@@ -38,6 +39,7 @@ function AppRoutes() {
       <Route path="/customer/:id" element={<CustomerDetail />} />
       <Route path="/add-customer" element={<AddCustomer />} />
       <Route path="/files" element={<Files />} />
+      <Route path="/documents" element={<Documents />} />
       <Route path="/new-file" element={<NewFile />} />
       <Route path="/file/:id" element={<FileDetail />} />
       <Route path="/payments" element={<Payments />} />
