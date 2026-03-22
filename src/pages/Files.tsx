@@ -28,7 +28,14 @@ export default function Files() {
 
   const filteredFiles = useMemo(() => {
     return files.filter(file => {
-      const matchesSearch = file.refNo.toLowerCase().includes(searchQuery.toLowerCase());
+      const query = searchQuery.toLowerCase();
+      const customer = getCustomerById(file.customerId);
+      const service = getServiceById(file.serviceId);
+      const matchesSearch = !query ||
+        file.refNo.toLowerCase().includes(query) ||
+        (customer?.name.toLowerCase().includes(query)) ||
+        (customer?.mobile.includes(query)) ||
+        (service?.name.toLowerCase().includes(query));
       
       if (statusFilter === 'ALL') return matchesSearch;
       if (statusFilter === 'PENDING') {
@@ -36,7 +43,7 @@ export default function Files() {
       }
       return matchesSearch && file.status === statusFilter;
     }).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-  }, [files, searchQuery, statusFilter]);
+  }, [files, searchQuery, statusFilter, getCustomerById, getServiceById]);
 
   const statusCounts = useMemo(() => {
     return files.reduce((acc, file) => {
