@@ -39,6 +39,7 @@ function AppRoutes() {
       <Route path="/customer/:id" element={<CustomerDetail />} />
       <Route path="/add-customer" element={<AddCustomer />} />
       <Route path="/files" element={<Files />} />
+      <Route path="/documents" element={<Documents />} />
       <Route path="/new-file" element={<NewFile />} />
       <Route path="/file/:id" element={<FileDetail />} />
       <Route path="/payments" element={<Payments />} />
