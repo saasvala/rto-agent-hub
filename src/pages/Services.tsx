@@ -55,7 +55,7 @@ export default function Services() {
           </button>
           <h1 className="text-lg font-semibold flex-1">Services & Pricing</h1>
           <button 
-            onClick={() => navigate('/add-service')}
+            onClick={() => {/* TODO: Add service modal */}}
             className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center"
           >
             <Plus className="w-5 h-5" />
