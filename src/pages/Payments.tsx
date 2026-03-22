@@ -154,9 +154,9 @@ export default function Payments() {
                       <div className="text-right">
                         <span className={cn(
                           'px-2 py-1 rounded text-xs font-medium',
-                          payment.mode === 'CASH' ? 'bg-green-100 text-green-700' :
-                          payment.mode === 'UPI' ? 'bg-purple-100 text-purple-700' :
-                          'bg-blue-100 text-blue-700'
+                          payment.mode === 'CASH' ? 'bg-success/20 text-success' :
+                          payment.mode === 'UPI' ? 'bg-primary/20 text-primary' :
+                          'bg-accent/20 text-accent'
                         )}>
                           {payment.mode}
                         </span>

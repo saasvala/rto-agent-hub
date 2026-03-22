@@ -7,10 +7,10 @@ import { cn } from '@/lib/utils';
 import { ExpenseType } from '@/types';
 
 const expenseTypeConfig: Record<ExpenseType, { icon: typeof Receipt; label: string; color: string }> = {
-  TRANSPORT: { icon: Truck, label: 'Transport', color: 'bg-blue-100 text-blue-700' },
-  FORM_PRINTING: { icon: FileText, label: 'Form/Printing', color: 'bg-purple-100 text-purple-700' },
-  RTO_RUNNING: { icon: Wrench, label: 'RTO Running', color: 'bg-orange-100 text-orange-700' },
-  MISCELLANEOUS: { icon: HelpCircle, label: 'Miscellaneous', color: 'bg-gray-100 text-gray-700' },
+  TRANSPORT: { icon: Truck, label: 'Transport', color: 'bg-primary/10 text-primary' },
+  FORM_PRINTING: { icon: FileText, label: 'Form/Printing', color: 'bg-accent/10 text-accent' },
+  RTO_RUNNING: { icon: Wrench, label: 'RTO Running', color: 'bg-warning/10 text-warning' },
+  MISCELLANEOUS: { icon: HelpCircle, label: 'Miscellaneous', color: 'bg-muted text-muted-foreground' },
 };
 
 export default function Expenses() {

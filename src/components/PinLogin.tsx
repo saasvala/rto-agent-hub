@@ -130,7 +130,8 @@ export default function PinLogin() {
       {/* Footer */}
       <div className="px-6 py-4 text-center">
         <p className="text-xs text-muted-foreground">
-          Licensed RTO Agent Software • Offline Ready
+          Licensed RTO Agent Software • Offline Ready<br />
+          <span className="font-medium">Powered by Software Vala™</span>
         </p>
       </div>
 

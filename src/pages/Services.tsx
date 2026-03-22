@@ -55,7 +55,7 @@ export default function Services() {
           </button>
           <h1 className="text-lg font-semibold flex-1">Services & Pricing</h1>
           <button 
-            onClick={() => navigate('/add-service')}
+            onClick={() => {/* TODO: Add service modal */}}
             className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center"
           >
             <Plus className="w-5 h-5" />
@@ -126,8 +126,8 @@ export default function Services() {
                         className={cn(
                           'px-3 py-1 rounded-full text-xs font-medium',
                           service.isActive
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-gray-100 text-gray-500'
+                            ? 'bg-success/20 text-success'
+                            : 'bg-muted text-muted-foreground'
                         )}
                       >
                         {service.isActive ? 'Active' : 'Inactive'}

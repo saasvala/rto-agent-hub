@@ -20,7 +20,7 @@ const statusFilters: { label: string; value: FileStatus | 'ALL' | 'PENDING' }[] 
 export default function Files() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { files } = useApp();
+  const { files, getCustomerById, getServiceById } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<FileStatus | 'ALL' | 'PENDING'>(
     (searchParams.get('status')?.toUpperCase() as FileStatus) || 'ALL'
@@ -28,7 +28,14 @@ export default function Files() {
 
   const filteredFiles = useMemo(() => {
     return files.filter(file => {
-      const matchesSearch = file.refNo.toLowerCase().includes(searchQuery.toLowerCase());
+      const query = searchQuery.toLowerCase();
+      const customer = getCustomerById(file.customerId);
+      const service = getServiceById(file.serviceId);
+      const matchesSearch = !query ||
+        file.refNo.toLowerCase().includes(query) ||
+        (customer?.name.toLowerCase().includes(query)) ||
+        (customer?.mobile.includes(query)) ||
+        (service?.name.toLowerCase().includes(query));
       
       if (statusFilter === 'ALL') return matchesSearch;
       if (statusFilter === 'PENDING') {
@@ -36,7 +43,7 @@ export default function Files() {
       }
       return matchesSearch && file.status === statusFilter;
     }).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-  }, [files, searchQuery, statusFilter]);
+  }, [files, searchQuery, statusFilter, getCustomerById, getServiceById]);
 
   const statusCounts = useMemo(() => {
     return files.reduce((acc, file) => {
@@ -69,7 +76,7 @@ export default function Files() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <input
             type="text"
-            placeholder="Search by reference number..."
+            placeholder="Search by ref, customer, service..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-10 pr-4 py-3 rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"

@@ -208,12 +208,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const addPayment = (payment: Omit<Payment, 'id'>) => {
     const newPayment = { ...payment, id: generateId() };
-    setState(prev => ({ ...prev, payments: [...prev.payments, newPayment] }));
-    
-    // Update file paid amount
-    const filePayments = [...state.payments, newPayment].filter(p => p.fileId === payment.fileId);
-    const totalPaid = filePayments.reduce((sum, p) => sum + p.amount, 0);
-    updateFile(payment.fileId, { paidAmount: totalPaid });
+    setState(prev => {
+      const updatedPayments = [...prev.payments, newPayment];
+      const filePayments = updatedPayments.filter(p => p.fileId === payment.fileId);
+      const totalPaid = filePayments.reduce((sum, p) => sum + p.amount, 0);
+      const updatedFiles = prev.files.map(f =>
+        f.id === payment.fileId ? { ...f, paidAmount: totalPaid, updatedAt: new Date() } : f
+      );
+      return { ...prev, payments: updatedPayments, files: updatedFiles };
+    });
   };
 
   const addExpense = (expense: Omit<Expense, 'id'>) => {
