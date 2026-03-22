@@ -7,6 +7,7 @@ import { AppProvider, useApp } from "@/context/AppContext";
 import PinLogin from "@/components/PinLogin";
 import OfflineIndicator from "@/components/OfflineIndicator";
 import Dashboard from "@/pages/Dashboard";
+import Documents from "@/pages/Documents";
 import Services from "@/pages/Services";
 import Customers from "@/pages/Customers";
 import CustomerDetail from "@/pages/CustomerDetail";
