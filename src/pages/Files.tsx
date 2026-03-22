@@ -20,7 +20,7 @@ const statusFilters: { label: string; value: FileStatus | 'ALL' | 'PENDING' }[] 
 export default function Files() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { files } = useApp();
+  const { files, getCustomerById, getServiceById } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<FileStatus | 'ALL' | 'PENDING'>(
     (searchParams.get('status')?.toUpperCase() as FileStatus) || 'ALL'
