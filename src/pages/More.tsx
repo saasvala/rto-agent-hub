@@ -139,7 +139,8 @@ export default function More() {
 
         {/* Version */}
         <p className="text-center text-xs text-muted-foreground pt-4">
-          RTO Agent v1.0.0 • Offline Ready
+          RTO Agent v1.0.0 • Offline Ready<br />
+          <span className="font-medium">Powered by Software Vala™</span>
         </p>
       </main>
 

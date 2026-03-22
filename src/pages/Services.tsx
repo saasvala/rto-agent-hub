@@ -126,8 +126,8 @@ export default function Services() {
                         className={cn(
                           'px-3 py-1 rounded-full text-xs font-medium',
                           service.isActive
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-gray-100 text-gray-500'
+                            ? 'bg-success/20 text-success'
+                            : 'bg-muted text-muted-foreground'
                         )}
                       >
                         {service.isActive ? 'Active' : 'Inactive'}
